@@ -1,0 +1,40 @@
+@echo off
+chcp 65001 >nul
+title GitGrab - GitHub'a Yükleme
+echo ============================================
+echo    GitGrab - GitHub'a Yükleme Scripti
+echo ============================================
+echo.
+:: Kullanici bilgilerini al
+set /p USERNAME=GitHub kullanici adini yaz: 
+set /p REPONAME=Repo adini yaz (ornek: gitgrab): 
+echo.
+echo [1/5] Git baslatiyor...
+git init
+echo.
+echo [2/5] Dosyalar ekleniyor...
+git add .
+echo.
+echo [3/5] Commit yapiliyor...
+git commit -m "GitGrab websitesi - ilk surum"
+echo.
+echo [4/5] GitHub reposu baglaniyor...
+git branch -M main
+git remote add origin https://github.com/%USERNAME%/%REPONAME%.git
+echo.
+echo [5/5] GitHub'a yukleniyor...
+git push -u origin main
+echo.
+echo ============================================
+echo    TAMAMLANDI!
+echo ============================================
+echo.
+echo Repon: https://github.com/%USERNAME%/%REPONAME%
+echo.
+echo SIRADAKI ADIM:
+echo 1. GitHub'da reponun Settings sayfasina git
+echo 2. Sol menuden "Pages" tikla
+echo 3. Source olarak "main" branch sec
+echo 4. Siten canli olacak: https://%USERNAME%.github.io/%REPONAME%/
+echo.
+pause
