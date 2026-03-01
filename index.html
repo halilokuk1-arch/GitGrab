@@ -1,85 +1,18 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitGrab - Repo Explorer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-    <div class="bg-gradient"></div>
-    <div class="bg-grid"></div>
-    <div class="floating-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-        <div class="orb orb-4"></div>
+<div id="copyToast" class="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+    <span>Link başarıyla kopyalandı!</span>
+</div>
+
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal-content">
+        <button class="modal-close" id="closeModal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div id="modalBody" class="modal-body">
+            </div>
     </div>
+</div>
 
-    <header class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">
-                <span class="logo-text">Git<span class="logo-accent">Grab</span></span>
-            </a>
-            <nav class="nav-links">
-                <a href="#search-section" class="nav-link">Ara</a>
-                <a href="#trending-section" class="nav-link">Trendler</a>
-            </nav>
-        </div>
-    </header>
-
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-badge"><span class="badge-dot"></span><span>Açık Kaynak Keşfet</span></div>
-            <h1 class="hero-title">Projeleri Bul ve <br><span class="gradient-text">Hızla İndir</span></h1>
-            <p class="hero-subtitle">Milyonlarca repoyu saniyeler içinde keşfedin.</p>
-            
-            <div class="hero-search" id="search-section">
-                <div class="search-wrapper">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Repo veya kullanıcı ara...">
-                    <button id="searchBtn" class="search-btn">Ara</button>
-                </div>
-                <div class="search-tags">
-                    <span class="tag-label">Popüler:</span>
-                    <button class="search-tag" data-query="react">React</button>
-                    <button class="search-tag" data-query="python">Python</button>
-                    <button class="search-tag" data-query="rust">Rust</button>
-                </div>
-            </div>
-
-            <div class="hero-stats">
-                <div class="stat"><span class="stat-number">330</span><span class="stat-suffix">M+</span><span class="stat-label">Repo</span></div>
-                <div class="stat-divider"></div>
-                <div class="stat"><span class="stat-number">100</span><span class="stat-suffix">M+</span><span class="stat-label">Geliştirici</span></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="trending-section" id="trending-section">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-badge">🔥 Trendler</div>
-                <h2 class="section-title">Haftanın Popüler Repoları</h2>
-                <div class="language-filter">
-                    <button class="lang-btn active" data-lang="">Hepsi</button>
-                    <button class="lang-btn" data-lang="javascript">JavaScript</button>
-                    <button class="lang-btn" data-lang="python">Python</button>
-                    <button class="lang-btn" data-lang="rust">Rust</button>
-                </div>
-            </div>
-            
-            <div id="loadingTrend" class="loading-spinner">
-                <div class="spinner"></div>
-                <p>Trendler yükleniyor...</p>
-            </div>
-
-            <div id="trendingGrid" class="trending-grid">
-                </div>
-        </div>
-    </section>
-
-    <script src="./script.js"></script>
+<script src="./script.js"></script>
 </body>
 </html>
