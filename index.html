@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="bg-gradient"></div>
@@ -19,15 +19,14 @@
         <div class="orb orb-4"></div>
     </div>
 
-    <header class="navbar" id="navbar">
+    <header class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
                 <span class="logo-text">Git<span class="logo-accent">Grab</span></span>
             </a>
             <nav class="nav-links">
                 <a href="#search-section" class="nav-link">Ara</a>
-                <a href="#trending-section" class="nav-link">Trend</a>
+                <a href="#trending-section" class="nav-link">Trendler</a>
                 <a href="#features-section" class="nav-link">Özellikler</a>
             </nav>
         </div>
@@ -35,5 +34,57 @@
 
     <section class="hero">
         <div class="hero-content">
-            <div class="hero-badge"><span class="badge-dot"></span><span>Açık Kaynak Dünyasını Keşfet</span></div>
-            <h1 class="
+            <div class="hero-badge"><span class="badge-dot"></span><span>GitHub Gezgini</span></div>
+            <h1 class="hero-title">Projeleri Keşfet ve <br><span class="gradient-text">Hızla İndir</span></h1>
+            <p class="hero-subtitle">Dünyanın en büyük açık kaynak kütüphanesinde arama yapın.</p>
+            
+            <div class="hero-search" id="search-section">
+                <div class="search-wrapper">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Repo veya kullanıcı adı...">
+                    <button id="searchBtn" class="search-btn">Ara</button>
+                </div>
+                <div class="search-tags">
+                    <button class="search-tag" data-query="react">React</button>
+                    <button class="search-tag" data-query="python">Python</button>
+                    <button class="search-tag" data-query="tensorflow">AI/ML</button>
+                </div>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat"><span class="stat-number">330</span><span class="stat-suffix">M+</span><span class="stat-label">Repo</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-number">100</span><span class="stat-suffix">M+</span><span class="stat-label">Geliştirici</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="results-section" id="resultsArea" style="display: none;">
+        <div class="section-container">
+            <h2 class="results-title">Arama Sonuçları</h2>
+            <div id="resultsGrid" class="results-grid"></div>
+        </div>
+    </section>
+
+    <section class="trending-section" id="trending-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-badge">🔥 Popüler</div>
+                <h2 class="section-title">Haftalık Trendler</h2>
+                <div class="language-filter">
+                    <button class="lang-btn active" data-lang="">Hepsi</button>
+                    <button class="lang-btn" data-lang="javascript">JS</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                    <button class="lang-btn" data-lang="rust">Rust</button>
+                </div>
+            </div>
+            <div id="trendingGrid" class="trending-grid"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 GitGrab - Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
