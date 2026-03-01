@@ -125,3 +125,59 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 });
+function createLegendaryCard(repo) {
+    const card = document.createElement('div');
+    card.className = 'repo-card';
+    
+    const popularity = Math.floor(Math.random() * 40) + 60; 
+
+    card.innerHTML = `
+        <div class="repo-card-header">
+            <div class="owner-zone">
+                <img src="${repo.owner.avatar_url}" class="repo-avatar">
+            </div>
+            <div class="repo-info">
+                <div class="repo-name">${repo.name}</div>
+                <div class="repo-owner">by ${repo.owner.login}</div>
+            </div>
+        </div>
+        
+        <div class="stat-bar-container">
+            <div class="stat-bar-fill" style="width: ${popularity}%"></div>
+        </div>
+
+        <p class="repo-desc">${repo.description ? repo.description.substring(0, 60) + '...' : 'Açıklama yok.'}</p>
+        
+        <div class="repo-meta">
+            <span class="meta-item">⭐ ${repo.stargazers_count.toLocaleString()}</span>
+            <span class="meta-item">🌐 ${repo.language || 'Mix'}</span>
+        </div>
+
+        <div class="repo-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+            <a href="${repo.html_url}/archive/refs/heads/${repo.default_branch}.zip" 
+               class="repo-action-btn btn-download action-bypass" 
+               style="flex: 1; text-align: center; text-decoration: none; font-size: 12px;">
+               📥 İndir
+            </a>
+            <button class="repo-action-btn btn-view action-bypass" 
+                    style="flex: 1; font-size: 12px;">
+               🔍 Detay
+            </button>
+        </div>
+    `;
+    
+    // Karta tıklayınca modal açılsın (butonlar hariç)
+    card.onclick = (e) => {
+        if (!e.target.closest('.action-bypass')) {
+            openEliteDetail(repo);
+        }
+    };
+
+    // Detay butonuna özel tıklama
+    card.querySelector('.btn-view').onclick = (e) => {
+        e.stopPropagation();
+        openEliteDetail(repo);
+    };
+
+    return card;
+}
