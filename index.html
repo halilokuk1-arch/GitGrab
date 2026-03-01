@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitGrab — Discover Open Source</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">⚡</div>
+    Git<span>Grab</span>
+  </a>
+  <ul>
+    <li><a href="#search-section">Search</a></li>
+    <li><a href="#trending-section">Trending</a></li>
+    <li><a href="#trending-section" class="nav-cta">Explore →</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="search-section">
+  <div class="hero-glow"></div>
+  <div class="hero-badge"><div class="pulse"></div>LIVE · 100M+ REPOSITORIES</div>
+  <h1>Discover<br><span class="highlight">Open Source</span><br>Projects</h1>
+  <p class="hero-sub">Search, explore, and clone from millions of GitHub repositories in seconds.</p>
+  <div class="search-wrapper">
+    <div class="search-box">
+      <div class="search-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <input id="search-input" type="text" placeholder="Search repositories, topics, users..." autocomplete="off">
+      <button class="search-btn" id="search-btn">SEARCH</button>
+    </div>
+    <div class="search-filters">
+      <span class="filter-label">Quick:</span>
+      <button class="filter-tag" onclick="quickSearch('react')">React</button>
+      <button class="filter-tag" onclick="quickSearch('machine-learning')">ML</button>
+      <button class="filter-tag" onclick="quickSearch('rust systems')">Rust</button>
+      <button class="filter-tag" onclick="quickSearch('cli tools')">CLI</button>
+      <button class="filter-tag" onclick="quickSearch('web3 blockchain')">Web3</button>
+      <button class="filter-tag" onclick="quickSearch('devops kubernetes')">DevOps</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="repo-count">330M+</div><div class="stat-label">REPOSITORIES</div></div>
+    <div class="stat"><div class="stat-num">100M+</div><div class="stat-label">DEVELOPERS</div></div>
+    <div class="stat"><div class="stat-num" id="live-stars">0</div><div class="stat-label">STARS FOUND</div></div>
+  </div>
+</section>
+
+<section class="results-section" id="results-section">
+  <div class="results-header">
+    <div class="results-title" id="results-title">Results</div>
+    <div class="results-meta" id="results-meta"></div>
+  </div>
+  <div class="results-grid" id="results-grid"></div>
+</section>
+
+<section id="trending-section">
+  <div class="section-header">
+    <div class="section-title"><span class="fire-icon">🔥</span>Trending Now</div>
+    <div class="period-tabs">
+      <button class="period-tab active" onclick="setTrendingPeriod('daily', this)">Today</button>
+      <button class="period-tab" onclick="setTrendingPeriod('weekly', this)">Week</button>
+      <button class="period-tab" onclick="setTrendingPeriod('monthly', this)">Month</button>
+    </div>
+  </div>
+  <div class="lang-filters">
+    <button class="lang-btn active" onclick="setLang('', this)">All</button>
+    <button class="lang-btn" onclick="setLang('javascript', this)"><span class="dot" style="background:#f0e050"></span>JavaScript</button>
+    <button class="lang-btn" onclick="setLang('python', this)"><span class="dot" style="background:#3572A5"></span>Python</button>
+    <button class="lang-btn" onclick="setLang('rust', this)"><span class="dot" style="background:#dea584"></span>Rust</button>
+    <button class="lang-btn" onclick="setLang('typescript', this)"><span class="dot" style="background:#2b7489"></span>TypeScript</button>
+    <button class="lang-btn" onclick="setLang('go', this)"><span class="dot" style="background:#00ADD8"></span>Go</button>
+  </div>
+  <div class="trending-grid" id="trending-grid">
+    <div class="skeleton"></div>
+    <div class="skeleton" style="animation-delay:.1s"></div>
+    <div class="skeleton" style="animation-delay:.2s"></div>
+    <div class="skeleton" style="animation-delay:.3s"></div>
+    <div class="skeleton" style="animation-delay:.4s"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-text">© 2024 GitGrab — <a class="footer-link" href="https://github.com" target="_blank">GitHub API</a> powered</div>
+  <div class="footer-text" id="rate-limit-info"></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
