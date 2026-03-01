@@ -58,8 +58,8 @@ pre {
     color: white;
     transition: all 0.2s;
 }
-
 .repo-action-btn:hover {
     background: var(--accent-1);
     transform: translateY(-2px);
 }
+
