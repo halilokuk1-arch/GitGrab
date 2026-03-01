@@ -1,75 +1,828 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Web Projesi</title>
-    <style>
-        /* Modern Görünüm İçin CSS */
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
-            color: #333;
-        }
-        header {
-            background: #2c3e50;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        nav {
-            display: flex;
-            justify-content: center;
-            background: #34495e;
-            padding: 10px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-        .hero {
-            padding: 50px 20px;
-            text-align: center;
-            background: white;
-            margin: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .btn {
-            background: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            background: #2980b9;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitGrab — Discover Open Source</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --surface2: #161b22;
+    --surface3: #21262d;
+    --border: #30363d;
+    --accent: #f0883e;
+    --accent2: #58a6ff;
+    --green: #3fb950;
+    --purple: #bc8cff;
+    --red: #ff7b72;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --dim: #484f58;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease, background 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(240,136,62,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.15s ease, width 0.2s, height 0.2s, border-color 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(240,136,62,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,136,62,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(8,12,16,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--accent) !important;
+    color: #000 !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 40px 80px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(240,136,62,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(240,136,62,0.1);
+    border: 1px solid rgba(240,136,62,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .pulse {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+  h1 .highlight {
+    color: var(--accent);
+    position: relative;
+  }
+  h1 .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    opacity: 0.3;
+    border-radius: 2px;
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .search-wrapper {
+    width: 100%;
+    max-width: 640px;
+    animation: fadeUp 0.6s ease 0.3s both;
+    position: relative;
+    z-index: 2;
+  }
+  .search-box {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .search-box:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(240,136,62,0.15), 0 8px 40px rgba(0,0,0,0.4);
+  }
+  .search-icon {
+    padding: 0 16px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+  }
+  #search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    padding: 16px 0;
+    caret-color: var(--accent);
+  }
+  #search-input::placeholder { color: var(--dim); }
+  .search-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 0 28px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: none;
+    transition: opacity 0.2s;
+  }
+  .search-btn:hover { opacity: 0.85; }
+  .search-filters {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-tag {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .filter-tag:hover, .filter-tag.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(240,136,62,0.08);
+  }
+  .stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 64px;
+    animation: fadeUp 0.6s ease 0.4s both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+  }
+  .results-section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+    display: none;
+  }
+  .results-section.visible { display: block; }
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .results-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .results-meta { font-size: 12px; color: var(--muted); }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+  .repo-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+  .repo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .repo-card:hover {
+    border-color: rgba(240,136,62,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .repo-card:hover::before { opacity: 1; }
+  .repo-owner {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .repo-owner img { width: 16px; height: 16px; border-radius: 50%; }
+  .repo-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--accent2);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 10px;
+    transition: color 0.2s;
+  }
+  .repo-name:hover { color: var(--accent); }
+  .repo-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .repo-meta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .repo-stat { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
+  .repo-topics { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .topic-tag {
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.2);
+    color: var(--accent2);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .clone-btn {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .clone-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  #trending-section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .fire-icon { font-size: 28px; animation: flicker 2s ease infinite; }
+  @keyframes flicker {
+    0%, 100% { transform: scale(1) rotate(-2deg); }
+    25% { transform: scale(1.1) rotate(2deg); }
+    75% { transform: scale(0.95) rotate(-1deg); }
+  }
+  .period-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .period-tab {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .period-tab.active { background: var(--surface3); color: var(--text); }
+  .lang-filters { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .lang-btn.active { background: rgba(240,136,62,0.1); border-color: var(--accent); color: var(--accent); }
+  .trending-grid { display: flex; flex-direction: column; gap: 12px; }
+  .trending-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+    animation: slideIn 0.4s ease both;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-16px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .trending-item::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .trending-item:hover { border-color: rgba(240,136,62,0.3); background: var(--surface3); transform: translateX(4px); }
+  .trending-item:hover::after { opacity: 1; }
+  .rank { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--dim); text-align: center; }
+  .rank.top3 { color: var(--accent); }
+  .trending-info { min-width: 0; }
+  .trending-repo-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent2);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s;
+  }
+  .trending-repo-name:hover { color: var(--accent); }
+  .trending-desc { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .trending-stats { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 140px; }
+  .stars-count { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px; }
+  .stars-new { font-size: 11px; color: var(--green); background: rgba(63,185,80,0.1); padding: 2px 6px; border-radius: 4px; }
+  .lang-badge { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease infinite;
+    height: 72px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .toast {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    background: var(--surface3);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    z-index: 1000;
+    transform: translateY(16px);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .footer-text { font-size: 12px; color: var(--dim); }
+  .footer-link { color: var(--accent); text-decoration: none; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+</style>
 </head>
 <body>
 
-    <header>
-        <h1>Proje Başlığı</h1>
-    </header>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
 
-    <nav>
-        <a href="#">Anasayfa</a>
-        <a href="#">Hakkımızda</a>
-        <a href="#">Hizmetler</a>
-        <a href="#">İletişim</a>
-    </nav>
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">⚡</div>
+    Git<span>Grab</span>
+  </a>
+  <ul>
+    <li><a href="#search-section">Search</a></li>
+    <li><a href="#trending-section">Trending</a></li>
+    <li><a href="#trending-section" class="nav-cta">Explore →</a></li>
+  </ul>
+</nav>
 
-    <div class="hero">
-        <h2>Sitemize Hoş Geldiniz</h2>
-        <p>İhtiyacınız olan tüm çözümler burada yer alıyor.</p>
-        <button class="btn">Hemen Başla</button>
+<section class="hero" id="search-section">
+  <div class="hero-glow"></div>
+  <div class="hero-badge"><div class="pulse"></div>LIVE · 100M+ REPOSITORIES</div>
+  <h1>Discover<br><span class="highlight">Open Source</span><br>Projects</h1>
+  <p class="hero-sub">Search, explore, and clone from millions of<br>GitHub repositories in seconds.</p>
+  <div class="search-wrapper">
+    <div class="search-box">
+      <div class="search-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <input id="search-input" type="text" placeholder="Search repositories, topics, users..." autocomplete="off">
+      <button class="search-btn" id="search-btn">SEARCH</button>
     </div>
+    <div class="search-filters">
+      <span style="font-size:11px;color:var(--dim);padding:5px 4px;">Quick:</span>
+      <button class="filter-tag" onclick="quickSearch('react')">React</button>
+      <button class="filter-tag" onclick="quickSearch('machine-learning')">ML</button>
+      <button class="filter-tag" onclick="quickSearch('rust systems')">Rust</button>
+      <button class="filter-tag" onclick="quickSearch('cli tools')">CLI</button>
+      <button class="filter-tag" onclick="quickSearch('web3 blockchain')">Web3</button>
+      <button class="filter-tag" onclick="quickSearch('devops kubernetes')">DevOps</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="repo-count">330M+</div><div class="stat-label">REPOSITORIES</div></div>
+    <div class="stat"><div class="stat-num">100M+</div><div class="stat-label">DEVELOPERS</div></div>
+    <div class="stat"><div class="stat-num" id="live-stars">0</div><div class="stat-label">STARS FOUND</div></div>
+  </div>
+</section>
 
+<section class="results-section" id="results-section">
+  <div class="results-header">
+    <div class="results-title" id="results-title">Results</div>
+    <div class="results-meta" id="results-meta"></div>
+  </div>
+  <div class="results-grid" id="results-grid"></div>
+</section>
+
+<section id="trending-section">
+  <div class="section-header">
+    <div class="section-title"><span class="fire-icon">🔥</span>Trending Now</div>
+    <div class="period-tabs">
+      <button class="period-tab active" onclick="setTrendingPeriod('daily', this)">Today</button>
+      <button class="period-tab" onclick="setTrendingPeriod('weekly', this)">Week</button>
+      <button class="period-tab" onclick="setTrendingPeriod('monthly', this)">Month</button>
+    </div>
+  </div>
+  <div class="lang-filters">
+    <button class="lang-btn active" onclick="setLang('', this)">All</button>
+    <button class="lang-btn" onclick="setLang('javascript', this)"><span style="width:10px;height:10px;border-radius:50%;background:#f0e050;display:inline-block"></span>JavaScript</button>
+    <button class="lang-btn" onclick="setLang('python', this)"><span style="width:10px;height:10px;border-radius:50%;background:#3572A5;display:inline-block"></span>Python</button>
+    <button class="lang-btn" onclick="setLang('rust', this)"><span style="width:10px;height:10px;border-radius:50%;background:#dea584;display:inline-block"></span>Rust</button>
+    <button class="lang-btn" onclick="setLang('typescript', this)"><span style="width:10px;height:10px;border-radius:50%;background:#2b7489;display:inline-block"></span>TypeScript</button>
+    <button class="lang-btn" onclick="setLang('go', this)"><span style="width:10px;height:10px;border-radius:50%;background:#00ADD8;display:inline-block"></span>Go</button>
+  </div>
+  <div class="trending-grid" id="trending-grid">
+    <div class="skeleton"></div>
+    <div class="skeleton" style="animation-delay:0.1s"></div>
+    <div class="skeleton" style="animation-delay:0.2s"></div>
+    <div class="skeleton" style="animation-delay:0.3s"></div>
+    <div class="skeleton" style="animation-delay:0.4s"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-text">© 2024 GitGrab — <a class="footer-link" href="https://github.com" target="_blank">GitHub API</a> powered</div>
+  <div class="footer-text" id="rate-limit-info"></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let rx = 0, ry = 0, cx = 0, cy = 0;
+document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; cursor.style.left = cx + 'px'; cursor.style.top = cy + 'px'; });
+function animRing() { rx += (cx - rx) * 0.15; ry += (cy - ry) * 0.15; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing); }
+animRing();
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1.8)'; cursor.style.background = 'var(--accent2)'; ring.style.width = '50px'; ring.style.height = '50px'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; cursor.style.background = 'var(--accent)'; ring.style.width = '36px'; ring.style.height = '36px'; });
+});
+
+let currentLang = '', currentPeriod = 'daily', totalStars = 0;
+
+const langColors = {
+  'JavaScript':'#f0e050','TypeScript':'#2b7489','Python':'#3572A5','Rust':'#dea584',
+  'Go':'#00ADD8','Java':'#b07219','C++':'#f34b7d','C':'#555555','Shell':'#89e051',
+  'Ruby':'#701516','Swift':'#ffac45','Kotlin':'#F18E33','Vue':'#41b883','HTML':'#e34c26'
+};
+function getLangColor(lang) { return langColors[lang] || '#f0883e'; }
+
+async function loadTrending() {
+  const grid = document.getElementById('trending-grid');
+  grid.innerHTML = Array(7).fill('<div class="skeleton"></div>').join('');
+  const dayMap = { daily: 1, weekly: 7, monthly: 30 };
+  const days = dayMap[currentPeriod];
+  const date = new Date(Date.now() - days * 86400000);
+  const since = date.toISOString().split('T')[0];
+  let q = `created:>${since} stars:>10`;
+  if (currentLang) q += ` language:${currentLang}`;
+  const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(q)}&sort=stars&order=desc&per_page=10`;
+  try {
+    const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+    const data = await res.json();
+    if (data.items && data.items.length > 0) {
+      renderTrending(data.items);
+    } else {
+      grid.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:48px;margin-bottom:16px">🔍</div><div style="font-family:Syne,sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">No trending repos found</div><div style="font-size:13px">Try changing the time period or language filter.</div></div>`;
+    }
+    const remaining = res.headers.get('X-RateLimit-Remaining');
+    if (remaining) document.getElementById('rate-limit-info').textContent = `API calls remaining: ${remaining}/60`;
+  } catch(e) { renderTrending(getMockTrending()); }
+}
+
+function renderTrending(repos) {
+  const grid = document.getElementById('trending-grid');
+  grid.innerHTML = '';
+  repos.forEach((repo, i) => {
+    const item = document.createElement('div');
+    item.className = 'trending-item';
+    item.style.animationDelay = (i * 0.06) + 's';
+    const color = getLangColor(repo.language);
+    const starsDisplay = repo.stargazers_count > 1000 ? (repo.stargazers_count / 1000).toFixed(1) + 'k' : repo.stargazers_count;
+    item.innerHTML = `
+      <div class="rank ${i < 3 ? 'top3' : ''}">${i < 3 ? ['①','②','③'][i] : i + 1}</div>
+      <div class="trending-info">
+        <a href="${repo.html_url}" target="_blank" class="trending-repo-name">${repo.full_name}</a>
+        <div class="trending-desc">${repo.description || 'No description available.'}</div>
+      </div>
+      <div class="trending-stats">
+        <div class="stars-count">★ ${starsDisplay}<span class="stars-new">↑ NEW</span></div>
+        <div class="lang-badge"><span style="width:9px;height:9px;border-radius:50%;background:${color};display:inline-block"></span>${repo.language || 'Various'}<span style="margin-left:6px;color:var(--dim)">⑂ ${repo.forks_count > 1000 ? (repo.forks_count/1000).toFixed(1)+'k' : repo.forks_count}</span></div>
+      </div>`;
+    item.addEventListener('click', e => { if (!e.target.closest('a')) copyCloneCmd(repo.clone_url, repo.name); });
+    grid.appendChild(item);
+    totalStars += repo.stargazers_count;
+    animateNumber('live-stars', totalStars);
+  });
+}
+
+function getMockTrending() {
+  return [
+    { full_name:'microsoft/vscode', description:'Visual Studio Code', html_url:'https://github.com/microsoft/vscode', stargazers_count:165000, forks_count:29000, language:'TypeScript', clone_url:'https://github.com/microsoft/vscode.git' },
+    { full_name:'torvalds/linux', description:'Linux kernel source tree', html_url:'https://github.com/torvalds/linux', stargazers_count:178000, forks_count:54000, language:'C', clone_url:'https://github.com/torvalds/linux.git' },
+    { full_name:'facebook/react', description:'A JavaScript library for building user interfaces', html_url:'https://github.com/facebook/react', stargazers_count:226000, forks_count:46000, language:'JavaScript', clone_url:'https://github.com/facebook/react.git' },
+    { full_name:'rust-lang/rust', description:'Empowering everyone to build reliable and efficient software.', html_url:'https://github.com/rust-lang/rust', stargazers_count:97000, forks_count:12500, language:'Rust', clone_url:'https://github.com/rust-lang/rust.git' },
+    { full_name:'vercel/next.js', description:'The React Framework for the Web', html_url:'https://github.com/vercel/next.js', stargazers_count:126000, forks_count:27000, language:'JavaScript', clone_url:'https://github.com/vercel/next.js.git' },
+    { full_name:'openai/openai-python', description:'The official Python library for the OpenAI API', html_url:'https://github.com/openai/openai-python', stargazers_count:23000, forks_count:3200, language:'Python', clone_url:'https://github.com/openai/openai-python.git' },
+  ];
+}
+
+async function doSearch(query) {
+  if (!query.trim()) return;
+  const resultsSection = document.getElementById('results-section');
+  const grid = document.getElementById('results-grid');
+  const title = document.getElementById('results-title');
+  const meta = document.getElementById('results-meta');
+  resultsSection.classList.add('visible');
+  grid.innerHTML = Array(6).fill('<div class="skeleton" style="height:180px"></div>').join('');
+  title.textContent = `Searching "${query}"...`;
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  try {
+    const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=12`;
+    const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+    const data = await res.json();
+    if (data.items && data.items.length > 0) {
+      title.textContent = `Results for "${query}"`;
+      meta.textContent = `${data.total_count.toLocaleString()} repositories found`;
+      renderSearchResults(data.items);
+      let s = data.items.reduce((a, r) => a + r.stargazers_count, 0);
+      animateNumber('live-stars', s);
+    } else {
+      title.textContent = `No results for "${query}"`;
+      meta.textContent = '';
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:48px;margin-bottom:16px">😕</div><div style="font-family:Syne,sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Nothing found</div></div>`;
+    }
+  } catch(e) { title.textContent = 'Error — API rate limit may be reached'; meta.textContent = 'Try again in a minute.'; grid.innerHTML = ''; }
+}
+
+function renderSearchResults(repos) {
+  const grid = document.getElementById('results-grid');
+  grid.innerHTML = '';
+  repos.forEach((repo, i) => {
+    const card = document.createElement('div');
+    card.className = 'repo-card';
+    card.style.animationDelay = (i * 0.04) + 's';
+    const color = getLangColor(repo.language);
+    const stars = repo.stargazers_count > 1000 ? (repo.stargazers_count / 1000).toFixed(1) + 'k' : repo.stargazers_count;
+    const topics = (repo.topics || []).slice(0, 3).map(t => `<span class="topic-tag">${t}</span>`).join('');
+    card.innerHTML = `
+      <button class="clone-btn" onclick="copyCloneCmd('${repo.clone_url}', '${repo.name}')">⎘ Clone</button>
+      <div class="repo-owner"><img src="${repo.owner.avatar_url}" alt="${repo.owner.login}" loading="lazy">${repo.owner.login}</div>
+      <a class="repo-name" href="${repo.html_url}" target="_blank">${repo.name}</a>
+      <div class="repo-desc">${repo.description || 'No description provided.'}</div>
+      <div class="repo-meta">
+        <span class="repo-stat">★ ${stars}</span>
+        <span class="repo-stat">⑂ ${repo.forks_count}</span>
+        ${repo.language ? `<span class="repo-stat"><span style="width:9px;height:9px;border-radius:50%;background:${color};display:inline-block;margin-right:2px"></span>${repo.language}</span>` : ''}
+      </div>
+      ${topics ? `<div class="repo-topics">${topics}</div>` : ''}`;
+    grid.appendChild(card);
+  });
+}
+
+function copyCloneCmd(url, name) {
+  navigator.clipboard.writeText(`git clone ${url}`).then(() => showToast(`✓ Copied: git clone ${name}`));
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function animateNumber(id, target) {
+  const el = document.getElementById(id);
+  let current = parseInt(el.textContent.replace(/[^0-9]/g, '')) || 0;
+  const diff = target - current, steps = 30, step = diff / steps;
+  let i = 0;
+  const timer = setInterval(() => {
+    current += step; i++;
+    if (i >= steps) { current = target; clearInterval(timer); }
+    const d = current > 1000000 ? (current/1000000).toFixed(1)+'M+' : current > 1000 ? (current/1000).toFixed(0)+'k' : Math.round(current).toLocaleString();
+    el.textContent = d;
+  }, 30);
+}
+
+function setLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadTrending();
+}
+
+function setTrendingPeriod(period, btn) {
+  currentPeriod = period;
+  document.querySelectorAll('.period-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadTrending();
+}
+
+function quickSearch(term) {
+  document.getElementById('search-input').value = term;
+  doSearch(term);
+}
+
+document.getElementById('search-btn').addEventListener('click', () => doSearch(document.getElementById('search-input').value));
+document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(e.target.value); });
+
+loadTrending();
+setTimeout(() => animateNumber('repo-count', 330000000), 800);
+</script>
 </body>
 </html>
