@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const resultsSection = document.getElementById('results-section');
+    const resultsGrid = document.getElementById('resultsGrid');
     const trendingGrid = document.getElementById('trendingGrid');
-    const loadingTrend = document.getElementById('loadingTrend');
 
-    // Kart Oluşturma Fonksiyonu (Senin CSS'ine tam uyumlu)
-    function createCard(repo) {
+    // Senin o şık kart yapını oluşturan fonksiyon
+    function createRepoCard(repo) {
         return `
             <div class="repo-card">
                 <div class="repo-card-header">
@@ -13,51 +16,44 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="repo-name">${repo.name}</div>
                     </div>
                 </div>
-                <p class="repo-desc">${repo.description || 'Bu repo için bir açıklama bulunmuyor.'}</p>
-                <div class="repo-topics">
-                    ${(repo.topics || []).slice(0, 3).map(t => `<span class="topic-tag">${t}</span>`).join('')}
-                </div>
+                <p class="repo-desc">${repo.description || 'Açıklama yok.'}</p>
                 <div class="repo-meta">
-                    <span class="meta-item">⭐ ${repo.stargazers_count.toLocaleString()}</span>
-                    <span class="meta-item">🍴 ${repo.forks_count.toLocaleString()}</span>
-                    <span class="meta-item"><span class="lang-dot" style="background:#6366f1"></span> ${repo.language || 'Mix'}</span>
+                    <span class="meta-item">⭐ ${repo.stargazers_count}</span>
+                    <span class="meta-item">🍴 ${repo.forks_count}</span>
                 </div>
                 <div class="repo-actions">
-                    <a href="${repo.html_url}/archive/refs/heads/${repo.default_branch}.zip" class="repo-action-btn btn-download">
-                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                        ZIP İndir
-                    </a>
+                    <a href="${repo.html_url}/archive/refs/heads/${repo.default_branch}.zip" class="repo-action-btn btn-download">ZIP İndir</a>
                     <a href="${repo.html_url}" target="_blank" class="repo-action-btn btn-view">GitHub</a>
                 </div>
             </div>`;
     }
 
-    async function loadTrending(query = 'stars:>50000') {
-        loadingTrend.style.display = 'block';
-        trendingGrid.innerHTML = '';
-        
+    async function search(query, grid, isSearch = false) {
+        if (!query) return;
+        if (isSearch) resultsSection.style.display = 'block';
+        grid.innerHTML = '<p>Yükleniyor...</p>';
+
         try {
-            const res = await fetch(`https://api.github.com/search/repositories?q=${query}&sort=stars&order=desc`);
+            const res = await fetch(`https://api.github.com/search/repositories?q=${query}&sort=stars`);
             const data = await res.json();
-            
-            loadingTrend.style.display = 'none';
+            grid.innerHTML = '';
             data.items.slice(0, 6).forEach(repo => {
-                trendingGrid.innerHTML += createCard(repo);
+                grid.innerHTML += createRepoCard(repo);
             });
-        } catch (err) {
-            loadingTrend.innerHTML = '<p>GitHub Kotası Doldu, biraz bekleyin.</p>';
+        } catch (e) {
+            grid.innerHTML = '<p>Hata oluştu.</p>';
         }
     }
 
-    // Sayfa açılınca en popülerleri getir
-    loadTrending();
+    // İlk açılışta trendleri çek (Eski kodundaki gibi dolu görünmesi için)
+    search('stars:>80000', trendingGrid);
 
-    // Dil filtrelerini çalıştır
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const lang = btn.dataset.lang;
-            const q = lang ? `language:${lang} stars:>10000` : 'stars:>50000';
-            loadTrending(q);
+    searchBtn.addEventListener('click', () => search(searchInput.value, resultsGrid, true));
+    
+    document.querySelectorAll('.search-tag').forEach(tag => {
+        tag.addEventListener('click', () => {
+            searchInput.value = tag.dataset.query;
+            search(tag.dataset.query, resultsGrid, true);
         });
     });
 });
