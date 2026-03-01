@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitGrab</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-blur"></div>
+
+<nav>
+  <div class="nav-logo">Git<span>Grab</span></div>
+  <div class="nav-center">
+    <a href="#hero">Home</a>
+    <a href="#trending">Trending</a>
+  </div>
+  <div class="nav-right">
+    <span class="live-badge"><span></span>Live</span>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="grid-lines"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-pill">🚀 330M+ Repositories Available</div>
+    <h1>Discover <em>Open Source</em><br>Like Never Before</h1>
+    <p>Search, explore and download any GitHub project instantly. One click to get the code.</p>
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="search-input" placeholder="Search any repository…" autocomplete="off">
+        <button id="search-btn">Search <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <div class="quick-tags">
+        <span>Try:</span>
+        <button onclick="qs('react')">React</button>
+        <button onclick="qs('machine learning')">ML</button>
+        <button onclick="qs('rust')">Rust</button>
+        <button onclick="qs('next.js')">Next.js</button>
+        <button onclick="qs('game engine')">Games</button>
+      </div>
+    </div>
+    <div class="hero-numbers">
+      <div><strong id="n-repos">330M+</strong><span>Repos</span></div>
+      <div class="divider"></div>
+      <div><strong>100M+</strong><span>Devs</span></div>
+      <div class="divider"></div>
+      <div><strong id="n-stars">—</strong><span>Stars Found</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<section id="results-wrap" class="hidden">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <h2 id="results-title">Results</h2>
+        <p id="results-sub"></p>
+      </div>
+    </div>
+    <div id="results-grid" class="repo-grid"></div>
+  </div>
+</section>
+
+<section id="trending">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <h2>🔥 Trending</h2>
+        <p>Most starred repositories this period</p>
+      </div>
+      <div class="head-controls">
+        <div class="tab-group">
+          <button class="tab active" onclick="setPeriod('daily',this)">Today</button>
+          <button class="tab" onclick="setPeriod('weekly',this)">Week</button>
+          <button class="tab" onclick="setPeriod('monthly',this)">Month</button>
+        </div>
+      </div>
+    </div>
+    <div class="lang-chips">
+      <button class="chip active" onclick="setLang('',this)">All</button>
+      <button class="chip" onclick="setLang('javascript',this)"><i style="--c:#f7df1e"></i>JS</button>
+      <button class="chip" onclick="setLang('python',this)"><i style="--c:#3572a5"></i>Python</button>
+      <button class="chip" onclick="setLang('rust',this)"><i style="--c:#dea584"></i>Rust</button>
+      <button class="chip" onclick="setLang('typescript',this)"><i style="--c:#2b7489"></i>TS</button>
+      <button class="chip" onclick="setLang('go',this)"><i style="--c:#00add8"></i>Go</button>
+      <button class="chip" onclick="setLang('c++',this)"><i style="--c:#f34b7d"></i>C++</button>
+    </div>
+    <div id="trending-list" class="trending-list">
+      <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+      <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-logo">Git<span>Grab</span></div>
+    <p>Powered by GitHub API · Open Source</p>
+    <p id="rl"></p>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
