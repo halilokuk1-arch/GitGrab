@@ -5,36 +5,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalBody = document.getElementById('modalBody');
     const toast = document.getElementById('copyToast');
 
-    // --- 1. SKELETON LOAD (Yükleme Efekti) ---
-    function showSkeletons(grid) {
-        grid.innerHTML = Array(6).fill('<div class="skeleton-card skeleton"></div>').join('');
+    // --- 1. SKELETON LOADING (Yükleme Efekti) ---
+    function showSkeletons(gridElement, count = 6) {
+        gridElement.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+            gridElement.innerHTML += `
+                <div class="repo-card skeleton">
+                    <div class="skeleton-header"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>`;
+        }
     }
 
-    // --- 2. README ÇEKME FONKSİYONU ---
-    async function fetchReadme(fullName) {
+    // --- 2. GÜÇLENDİRİLMİŞ TOAST ---
+    function showEliteToast(msg, type = 'success') {
+        const toastMsg = document.getElementById('toastMsg');
+        toastMsg.textContent = msg;
+        toast.style.borderColor = type === 'success' ? '#10b981' : '#f59e0b';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // --- 3. README ÖNİZLEME (Elite Özellik) ---
+    async function getReadme(fullName) {
         try {
             const res = await fetch(`https://api.github.com/repos/${fullName}/readme`, {
                 headers: { 'Accept': 'application/vnd.github.raw' }
             });
-            if (!res.ok) return "Bu proje için README detayı bulunamadı.";
             const text = await res.text();
-            return marked.parse(text); // Markdown'ı HTML'e çevirir
+            return text.slice(0, 500) + "..."; // İlk 500 karakter
         } catch {
-            return "Detaylar yüklenirken bir hata oluştu.";
+            return "README dosyası yüklenemedi.";
         }
     }
 
-    // --- 3. MODAL AÇILIŞ (README VE ETİKETLER) ---
+    // --- 4. MODAL AÇILIŞ (README Entegrasyonu) ---
     async function openEliteDetail(repo) {
+        modalBody.innerHTML = `<div class="spinner"></div><p style="text-align:center">Veriler analiz ediliyor...</p>`;
         modalOverlay.classList.add('active');
-        modalBody.innerHTML = `
-            <div style="text-align:center; padding:20px;">
-                <div class="spinner"></div>
-                <p>Proje detayları ve README analiz ediliyor...</p>
-            </div>
-        `;
 
-        const readmeHTML = await fetchReadme(repo.full_name);
+        const readmeContent = await getReadme(repo.full_name);
 
         modalBody.innerHTML = `
             <div class="modal-repo-header">
@@ -44,34 +55,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="modal-repo-owner">@${repo.owner.login}</div>
                 </div>
             </div>
-
-            <div class="repo-topics" style="margin-bottom: 15px;">
-                ${(repo.topics || []).map(t => `<span class="topic-tag">${t}</span>`).join('')}
-            </div>
             
-            <div class="readme-box">
-                ${readmeHTML}
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: var(--accent-1); margin-bottom: 8px;">📖 Proje Özeti</h4>
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; font-size: 0.85rem; color: var(--text-secondary); max-height: 150px; overflow-y: auto;">
+                    ${readmeContent}
+                </div>
             </div>
 
-            <div class="modal-stats" style="margin-top: 20px;">
-                <div class="modal-stat"><div class="modal-stat-value">⭐ ${repo.stargazers_count.toLocaleString()}</div><div class="modal-stat-label">Yıldız</div></div>
-                <div class="modal-stat"><div class="modal-stat-value">🍴 ${repo.forks_count.toLocaleString()}</div><div class="modal-stat-label">Fork</div></div>
-                <div class="modal-stat"><div class="modal-stat-value">${repo.language || 'Mix'}</div><div class="modal-stat-label">Dil</div></div>
+            <div class="modal-stats">
+                <div class="modal-stat"><div class="modal-stat-value">⭐ ${repo.stargazers_count}</div></div>
+                <div class="modal-stat"><div class="modal-stat-value">🍴 ${repo.forks_count}</div></div>
+                <div class="modal-stat"><div class="modal-stat-value">👁️ ${repo.watchers_count}</div></div>
             </div>
 
             <div class="modal-actions" style="margin-top: 20px;">
                 <button class="repo-action-btn btn-download" id="shareBtn">🔗 Paylaş</button>
-                <a href="${repo.html_url}" target="_blank" class="repo-action-btn btn-view">GitHub'da Aç</a>
+                <a href="${repo.html_url}" target="_blank" class="repo-action-btn btn-view">GitHub</a>
             </div>
         `;
 
+        // Paylaş Butonu
         document.getElementById('shareBtn').onclick = () => {
-            navigator.clipboard.writeText(`Hey, bu projeye bakmalısın: ${repo.html_url}`);
-            showToast('Paylaşım linki kopyalandı!');
+            const shareText = `${repo.name} projesini keşfet! ${repo.html_url}`;
+            navigator.clipboard.writeText(shareText);
+            showEliteToast('Paylaşım linki kopyalandı!');
         };
     }
 
-    // --- 4. KART OLUŞTURMA (TOPICS EKLENDİ) ---
+    // --- 5. KART OLUŞTURMA ---
     function createEliteCard(repo) {
         const card = document.createElement('div');
         card.className = 'repo-card';
@@ -79,49 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="repo-card-header">
                 <img src="${repo.owner.avatar_url}" class="repo-avatar">
                 <div class="repo-info">
-                    <div class="repo-owner">${repo.owner.login}</div>
                     <div class="repo-name">${repo.name}</div>
+                    <div class="repo-owner">${repo.owner.login}</div>
                 </div>
             </div>
             <div class="repo-topics">
                 ${(repo.topics || []).slice(0, 3).map(t => `<span class="topic-tag">${t}</span>`).join('')}
             </div>
             <div class="repo-meta">
-                <span>⭐ ${repo.stargazers_count.toLocaleString()}</span>
-                <span>🌐 ${repo.language || 'Mix'}</span>
+                <span>⭐ ${repo.stargazers_count}</span>
+                <span>${repo.language || 'Code'}</span>
             </div>
         `;
         card.onclick = () => openEliteDetail(repo);
         return card;
-    }
-
-    // --- 5. ANA VERİ MOTORU ---
-    async function loadRepos(q, grid) {
-        showSkeletons(grid);
-        try {
-            const res = await fetch(`https://api.github.com/search/repositories?q=${q}&sort=stars&order=desc`);
-            const data = await res.json();
-            grid.innerHTML = '';
-            data.items.slice(0, 6).forEach(repo => grid.appendChild(createEliteCard(repo)));
-        } catch (err) {
-            grid.innerHTML = '<p>Veri çekme sınırı aşıldı, lütfen biraz bekleyin.</p>';
-        }
-    }
-
-    // Başlatıcılar
-    loadRepos('stars:>100000', trendingGrid);
-    
-    document.getElementById('searchBtn').onclick = () => {
-        const val = document.getElementById('searchInput').value;
-        document.getElementById('results-section').style.display = 'block';
-        loadRepos(val, resultsGrid);
-    };
-
-    document.getElementById('closeModal').onclick = () => modalOverlay.classList.remove('active');
-    
-    function showToast(msg) {
-        toast.querySelector('span').textContent = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-});
