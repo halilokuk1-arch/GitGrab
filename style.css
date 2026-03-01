@@ -1257,3 +1257,32 @@ body {
         font-size: 1rem;
     }
 }
+/* Skeleton Animasyonu */
+@keyframes skeleton-loading {
+    0% { background-color: rgba(255, 255, 255, 0.05); }
+    100% { background-color: rgba(255, 255, 255, 0.12); }
+}
+
+.skeleton {
+    animation: skeleton-loading 1s linear infinite alternate;
+    border-radius: 8px;
+}
+
+.skeleton-card {
+    height: 200px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.readme-box {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    line-height: 1.6;
+}
