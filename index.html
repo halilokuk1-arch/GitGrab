@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitGrab</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;
+  --bg1:#111;
+  --bg2:#1a1a1a;
+  --bg3:#222;
+  --b:#2a2a2a;
+  --b2:#333;
+  --t:#fafafa;
+  --t2:#999;
+  --t3:#555;
+  --g:#00ff88;
+  --b_:#7c7cff;
+  --p:#ff6b9d;
+  --r:10px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit}
+img{display:block}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#333;border-radius:99px}
+
+/* NAV */
+nav{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  z-index:999;
+  display:flex;align-items:center;gap:0;
+  background:rgba(10,10,10,0.8);
+  border:1px solid var(--b);
+  border-radius:99px;
+  backdrop-filter:blur(20px);
+  padding:10px 10px 10px 24px;
+  gap:32px;
+}
+.n-logo{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.n-logo b{color:var(--g)}
+.n-links{display:flex;gap:24px}
+.n-links a{font-size:13px;color:var(--t2);transition:color .15s}
+.n-links a:hover{color:var(--t)}
+.n-btn{
+  background:var(--t);color:var(--bg);
+  border:none;border-radius:99px;
+  padding:8px 18px;font-size:13px;font-weight:600;
+  transition:opacity .15s;
+}
+.n-btn:hover{opacity:.85}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:120px 20px 80px;
+  position:relative;overflow:hidden;
+}
+.hero-gfx{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 50%,rgba(124,124,255,.07) 0%,transparent 70%),
+    radial-gradient(ellipse 500px 400px at 80% 40%,rgba(0,255,136,.05) 0%,transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 90%,rgba(255,107,157,.05) 0%,transparent 70%);
+}
+.hero-dots{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,#ffffff08 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.hero-inner{position:relative;z-index:1;max-width:760px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--b);
+  border-radius:99px;padding:6px 14px;
+  font-size:12px;color:var(--t2);
+  margin-bottom:32px;
+  background:rgba(255,255,255,.03);
+}
+.hero-badge i{width:6px;height:6px;background:var(--g);border-radius:50%;box-shadow:0 0 8px var(--g);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{
+  font-size:clamp(44px,7vw,80px);
+  font-weight:700;
+  letter-spacing:-2.5px;
+  line-height:1.05;
+  margin-bottom:20px;
+}
+h1 span{
+  background:linear-gradient(90deg,#fff 0%,#aaa 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+h1 em{
+  font-style:normal;
+  background:linear-gradient(90deg,var(--g),var(--b_));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:17px;color:var(--t2);font-weight:400;margin-bottom:44px;line-height:1.65}
+
+/* SEARCH */
+.s-wrap{max-width:580px;margin:0 auto 24px}
+.s-box{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg1);
+  border:1px solid var(--b2);
+  border-radius:var(--r);
+  padding:6px 6px 6px 16px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.s-box:focus-within{
+  border-color:#444;
+  box-shadow:0 0 0 3px rgba(255,255,255,.05);
+}
+.s-box svg{color:var(--t3);flex-shrink:0}
+#si{
+  flex:1;background:none;border:none;outline:none;
+  color:var(--t);font-family:'Inter',sans-serif;font-size:15px;
+  padding:8px 0;
+}
+#si::placeholder{color:var(--t3)}
+#sb{
+  background:var(--t);color:var(--bg);
+  border:none;border-radius:7px;
+  padding:10px 20px;font-size:13px;font-weight:600;
+  transition:opacity .15s;white-space:nowrap;
+}
+#sb:hover{opacity:.9}
+.s-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.s-tags span{font-size:12px;color:var(--t3)}
+.stag{
+  background:none;border:1px solid var(--b);
+  color:var(--t2);font-size:12px;
+  padding:4px 12px;border-radius:99px;
+  transition:all .15s;
+}
+.stag:hover{border-color:var(--b2);color:var(--t);background:var(--bg2)}
+
+.hero-stats{
+  display:flex;align-items:center;gap:0;
+  margin-top:56px;
+  border:1px solid var(--b);border-radius:var(--r);
+  overflow:hidden;background:var(--bg1);
+  display:inline-flex;
+}
+.hs{padding:16px 32px;text-align:center}
+.hs+.hs{border-left:1px solid var(--b)}
+.hs strong{display:block;font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:2px}
+.hs span{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;font-weight:500}
+
+/* RESULTS */
+#res{padding:60px 20px 0;display:none}
+.container{max-width:1100px;margin:0 auto}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.sec-hd h2{font-size:20px;font-weight:600;letter-spacing:-.3px}
+.sec-hd small{font-size:13px;color:var(--t2)}
+.rgrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:12px;
+}
+
+/* REPO CARD */
+.rc{
+  background:var(--bg1);
+  border:1px solid var(--b);
+  border-radius:var(--r);
+  padding:18px;
+  transition:border-color .2s,background .2s,transform .2s;
+  position:relative;
+  animation:fu .3s ease both;
+}
+.rc:hover{border-color:var(--b2);background:var(--bg2);transform:translateY(-2px)}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.rc-owner{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2)}
+.rc-owner img{width:18px;height:18px;border-radius:50%}
+.rc-acts{display:flex;gap:5px}
+.rc-name{font-size:15px;font-weight:600;letter-spacing:-.2px;margin-bottom:6px;display:block;color:var(--t);transition:color .15s}
+.rc-name:hover{color:var(--g)}
+.rc-desc{font-size:13px;color:var(--t2);line-height:1.55;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rc-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--b)}
+.rm{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--t2)}
+.rm.star{color:#e3b341}
+.ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rc-topics{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.rtopic{font-size:11px;color:var(--b_);background:rgba(124,124,255,.08);border:1px solid rgba(124,124,255,.15);padding:2px 8px;border-radius:99px}
+
+/* BTN SMALL */
+.bs{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--bg2);border:1px solid var(--b);
+  color:var(--t2);font-size:11px;font-weight:500;
+  padding:4px 9px;border-radius:6px;
+  transition:all .15s;
+}
+.bs:hover{border-color:var(--b2);color:var(--t);background:var(--bg3)}
+.bs.dl:hover{border-color:rgba(0,255,136,.3);color:var(--g);background:rgba(0,255,136,.05)}
+
+/* TRENDING */
+#trending{padding:80px 20px 100px}
+.trend-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:12px;
+}
+.trend-hd h2{font-size:20px;font-weight:600;letter-spacing:-.3px}
+.tabs{display:flex;background:var(--bg1);border:1px solid var(--b);border-radius:99px;padding:3px;gap:2px}
+.t-tab{
+  background:none;border:none;color:var(--t2);
+  font-size:12px;font-weight:500;
+  padding:5px 14px;border-radius:99px;
+  transition:all .15s;
+}
+.t-tab.on{background:var(--bg3);color:var(--t);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.lfilters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.lf{
+  display:flex;align-items:center;gap:5px;
+  background:none;border:1px solid var(--b);
+  color:var(--t2);font-size:12px;
+  padding:5px 12px;border-radius:99px;
+  transition:all .15s;
+}
+.lf i{width:7px;height:7px;border-radius:50%;background:var(--lc)}
+.lf.on,.lf:hover{border-color:var(--b2);color:var(--t);background:var(--bg2)}
+
+.tlist{display:flex;flex-direction:column;gap:8px}
+.trow{
+  display:flex;align-items:center;gap:16px;
+  background:var(--bg1);border:1px solid var(--b);
+  border-radius:var(--r);padding:14px 18px;
+  animation:fu .3s ease both;
+  transition:border-color .2s,background .2s,transform .2s;
+}
+.trow:hover{border-color:var(--b2);background:var(--bg2);transform:translateX(3px)}
+.tnum{
+  width:32px;flex-shrink:0;
+  font-size:18px;font-weight:700;color:var(--t3);
+  text-align:center;font-variant-numeric:tabular-nums;
+}
+.tnum.g1{color:#e3b341}
+.tnum.g2{color:#888}
+.tnum.g3{color:#c17f3e}
+.ti{flex:1;min-width:0}
+.tname{
+  font-size:14px;font-weight:600;letter-spacing:-.2px;
+  display:block;margin-bottom:2px;color:var(--t);transition:color .15s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.tname:hover{color:var(--g)}
+.tdesc{font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tmeta{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;min-width:120px}
+.tstar{font-size:13px;font-weight:600;color:#e3b341}
+.tlang{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--t2)}
+.tdl{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(0,255,136,.07);
+  border:1px solid rgba(0,255,136,.2);
+  color:var(--g);font-size:11px;font-weight:500;
+  padding:4px 10px;border-radius:99px;
+  transition:all .15s;
+}
+.tdl:hover{background:rgba(0,255,136,.15);box-shadow:0 0 12px rgba(0,255,136,.15)}
+
+/* SKEL */
+.sk{
+  height:68px;background:var(--bg1);
+  border:1px solid var(--b);border-radius:var(--r);
+  position:relative;overflow:hidden;
+}
+.sk::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 25%,rgba(255,255,255,.03) 50%,transparent 75%);
+  background-size:200% 100%;animation:sh 1.4s ease infinite;
+}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--b);
+  padding:32px 20px;text-align:center;
+}
+footer p{font-size:12px;color:var(--t3)}
+footer b{color:var(--t2);font-weight:500}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--bg2);border:1px solid rgba(0,255,136,.25);
+  color:var(--g);font-size:12px;font-weight:500;
+  padding:10px 16px;border-radius:8px;
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  transition:all .25s;z-index:999;
+  backdrop-filter:blur(10px);
+}
+#toast.on{opacity:1;transform:translateY(0)}
+
+@media(max-width:640px){
+  nav{top:8px;padding:8px 8px 8px 16px;gap:16px}
+  .n-links{display:none}
+  h1{letter-spacing:-1.5px}
+  .hs{padding:12px 20px}
+  .hs strong{font-size:18px}
+  .tmeta{display:none}
+  .trow{gap:10px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="n-logo">git<b>grab</b></div>
+  <div class="n-links">
+    <a href="#hero">Home</a>
+    <a href="#trending">Trending</a>
+  </div>
+  <button class="n-btn" onclick="document.getElementById('si').focus()">Search repos →</button>
+</nav>
+
+<section id="hero">
+  <div class="hero-gfx"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <i></i>
+      GitHub API · Live
+    </div>
+    <h1><span>Find any</span><br><em>open source</em><br><span>project</span></h1>
+    <p class="hero-sub">Search 330M+ repositories. Download any project as a ZIP instantly.</p>
+
+    <div class="s-wrap">
+      <div class="s-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="si" placeholder="Search repositories…" autocomplete="off">
+        <button id="sb">Search</button>
+      </div>
+    </div>
+    <div class="s-tags">
+      <span>Try:</span>
+      <button class="stag" onclick="qs('react')">react</button>
+      <button class="stag" onclick="qs('python ai')">python ai</button>
+      <button class="stag" onclick="qs('rust')">rust</button>
+      <button class="stag" onclick="qs('next.js')">next.js</button>
+      <button class="stag" onclick="qs('cli')">cli tools</button>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hs"><strong>330M+</strong><span>Repos</span></div>
+      <div class="hs"><strong>100M+</strong><span>Devs</span></div>
+      <div class="hs"><strong id="ns">—</strong><span>Stars Found</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="res">
+  <div class="container">
+    <div class="sec-hd">
+      <h2 id="rt">Results</h2>
+      <small id="rm"></small>
+    </div>
+    <div class="rgrid" id="rg"></div>
+  </div>
+</section>
+
+<section id="trending">
+  <div class="container">
+    <div class="trend-hd">
+      <h2>Trending repos</h2>
+      <div class="tabs">
+        <button class="t-tab on" onclick="sp('daily',this)">Today</button>
+        <button class="t-tab" onclick="sp('weekly',this)">This week</button>
+        <button class="t-tab" onclick="sp('monthly',this)">This month</button>
+      </div>
+    </div>
+    <div class="lfilters">
+      <button class="lf on" onclick="sl('',this)">All</button>
+      <button class="lf" onclick="sl('javascript',this)" style="--lc:#f7df1e">JS</button>
+      <button class="lf" onclick="sl('python',this)" style="--lc:#3572a5">Python</button>
+      <button class="lf" onclick="sl('rust',this)" style="--lc:#dea584">Rust</button>
+      <button class="lf" onclick="sl('typescript',this)" style="--lc:#2b7489">TypeScript</button>
+      <button class="lf" onclick="sl('go',this)" style="--lc:#00add8">Go</button>
+      <button class="lf" onclick="sl('c++',this)" style="--lc:#f34b7d">C++</button>
+    </div>
+    <div class="tlist" id="tl">
+      <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+      <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built with <b>GitHub API</b> · <b>gitgrab</b></p>
+  <p id="rl" style="margin-top:4px"></p>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+const LC={JavaScript:'#f7df1e',TypeScript:'#2b7489',Python:'#3572a5',Rust:'#dea584',Go:'#00add8',Java:'#b07219','C++':'#f34b7d',C:'#858585',Shell:'#89e051',Ruby:'#701516',Swift:'#f05138',Vue:'#41b883',HTML:'#e34c26',CSS:'#563d7c'};
+const lc=l=>LC[l]||'#7c7cff';
+const fmt=n=>!n&&n!==0?'—':n>=1e6?(n/1e6).toFixed(1)+'M':n>=1000?(n/1000).toFixed(1)+'k':String(n);
+const zip=(f,b)=>`https://github.com/${f}/archive/refs/heads/${b||'main'}.zip`;
+
+let lang='',period='daily';
+
+async function loadTrending(){
+  const tl=document.getElementById('tl');
+  tl.innerHTML='<div class="sk"></div>'.repeat(6);
+  const days={daily:1,weekly:7,monthly:30}[period];
+  const since=new Date(Date.now()-days*86400000).toISOString().split('T')[0];
+  let q=`created:>${since} stars:>5${lang?' language:'+lang:''}`;
+  try{
+    const r=await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(q)}&sort=stars&order=desc&per_page=10`,{headers:{'Accept':'application/vnd.github.v3+json'}});
+    const d=await r.json();
+    d.items?.length?renderTrending(d.items):(tl.innerHTML=`<p style="padding:40px;text-align:center;color:var(--t2)">No results. Try different filters.</p>`);
+    const rem=r.headers.get('X-RateLimit-Remaining');
+    if(rem)document.getElementById('rl').textContent=`API calls remaining: ${rem}/60`;
+  }catch{renderTrending(mock())}
+}
+
+function renderTrending(repos){
+  const tl=document.getElementById('tl');
+  tl.innerHTML='';
+  const gc=['g1','g2','g3'];
+  repos.forEach((repo,i)=>{
+    const row=document.createElement('div');
+    row.className='trow';
+    row.style.animationDelay=(i*.05)+'s';
+    const z=zip(repo.full_name,repo.default_branch);
+    row.innerHTML=`
+      <div class="tnum ${gc[i]||''}">${String(i+1).padStart(2,'0')}</div>
+      <div class="ti">
+        <a href="${repo.html_url}" target="_blank" class="tname">${repo.full_name}</a>
+        <div class="tdesc">${repo.description||'No description.'}</div>
+      </div>
+      <div class="tmeta">
+        <div class="tstar">★ ${fmt(repo.stargazers_count)}</div>
+        <div class="tlang"><span style="width:7px;height:7px;border-radius:50%;background:${lc(repo.language)};display:inline-block"></span>${repo.language||'—'}</div>
+        <a class="tdl" href="${z}" target="_blank">⬇ ZIP</a>
+      </div>`;
+    row.addEventListener('click',e=>{if(!e.target.closest('a'))copyClone(repo.clone_url,repo.name)});
+    tl.appendChild(row);
+    animStar(repo.stargazers_count);
+  });
+}
+
+function mock(){return[
+  {full_name:'microsoft/vscode',description:'Visual Studio Code',html_url:'https://github.com/microsoft/vscode',stargazers_count:165000,forks_count:29000,language:'TypeScript',clone_url:'https://github.com/microsoft/vscode.git',default_branch:'main'},
+  {full_name:'torvalds/linux',description:'Linux kernel source tree',html_url:'https://github.com/torvalds/linux',stargazers_count:178000,forks_count:54000,language:'C',clone_url:'https://github.com/torvalds/linux.git',default_branch:'master'},
+  {full_name:'facebook/react',description:'The library for web and native user interfaces',html_url:'https://github.com/facebook/react',stargazers_count:226000,forks_count:46000,language:'JavaScript',clone_url:'https://github.com/facebook/react.git',default_branch:'main'},
+  {full_name:'rust-lang/rust',description:'Empowering everyone to build reliable and efficient software',html_url:'https://github.com/rust-lang/rust',stargazers_count:97000,forks_count:12500,language:'Rust',clone_url:'https://github.com/rust-lang/rust.git',default_branch:'master'},
+  {full_name:'vercel/next.js',description:'The React Framework for the Web',html_url:'https://github.com/vercel/next.js',stargazers_count:126000,forks_count:27000,language:'JavaScript',clone_url:'https://github.com/vercel/next.js.git',default_branch:'canary'},
+  {full_name:'openai/openai-python',description:'Official Python library for the OpenAI API',html_url:'https://github.com/openai/openai-python',stargazers_count:23000,forks_count:3200,language:'Python',clone_url:'https://github.com/openai/openai-python.git',default_branch:'main'},
+  {full_name:'denoland/deno',description:'A modern runtime for JavaScript and TypeScript',html_url:'https://github.com/denoland/deno',stargazers_count:92000,forks_count:5100,language:'Rust',clone_url:'https://github.com/denoland/deno.git',default_branch:'main'},
+]}
+
+async function doSearch(query){
+  if(!query.trim())return;
+  const sec=document.getElementById('res');
+  const grid=document.getElementById('rg');
+  sec.style.display='block';
+  grid.innerHTML='<div class="sk" style="height:160px"></div>'.repeat(6);
+  document.getElementById('rt').textContent=`"${query}"`;
+  document.getElementById('rm').textContent='Searching…';
+  sec.scrollIntoView({behavior:'smooth',block:'start'});
+  try{
+    const r=await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=12`,{headers:{'Accept':'application/vnd.github.v3+json'}});
+    const d=await r.json();
+    if(d.items?.length){
+      document.getElementById('rm').textContent=`${d.total_count.toLocaleString()} repos found`;
+      renderResults(d.items);
+    }else{
+      document.getElementById('rm').textContent='No results';
+      grid.innerHTML=`<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--t2)">No repositories found. Try different keywords.</div>`;
+    }
+  }catch{
+    document.getElementById('rm').textContent='API error';
+    grid.innerHTML=`<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--t2)">Could not reach GitHub API. You may have hit the rate limit.</div>`;
+  }
+}
+
+function renderResults(repos){
+  const grid=document.getElementById('rg');
+  grid.innerHTML='';
+  repos.forEach((repo,i)=>{
+    const card=document.createElement('div');
+    card.className='rc';
+    card.style.animationDelay=(i*.04)+'s';
+    const color=lc(repo.language);
+    const topics=(repo.topics||[]).slice(0,3).map(t=>`<span class="rtopic">${t}</span>`).join('');
+    const z=zip(repo.full_name,repo.default_branch);
+    card.innerHTML=`
+      <div class="rc-top">
+        <div class="rc-owner">
+          <img src="${repo.owner.avatar_url}" alt="" loading="lazy">
+          ${repo.owner.login}
+        </div>
+        <div class="rc-acts">
+          <button class="bs" onclick="copyClone('${repo.clone_url}','${repo.name}')">⎘ Clone</button>
+          <a class="bs dl" href="${z}" target="_blank">⬇ ZIP</a>
+        </div>
+      </div>
+      <a class="rc-name" href="${repo.html_url}" target="_blank">${repo.name}</a>
+      <div class="rc-desc">${repo.description||'No description provided.'}</div>
+      <div class="rc-foot">
+        <span class="rm star">★ ${fmt(repo.stargazers_count)}</span>
+        <span class="rm">⑂ ${fmt(repo.forks_count)}</span>
+        ${repo.language?`<span class="rm"><span class="ldot" style="background:${color}"></span>${repo.language}</span>`:''}
+      </div>
+      ${topics?`<div class="rc-topics">${topics}</div>`:''}`;
+    grid.appendChild(card);
+  });
+}
+
+function copyClone(url,name){
+  navigator.clipboard.writeText(`git clone ${url}`).then(()=>showToast(`Copied: git clone ${name}`));
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),3000);
+}
+
+let starTotal=0;
+function animStar(add){
+  starTotal+=add;
+  const el=document.getElementById('ns');
+  let n=0,steps=30,step=starTotal/steps,i=0;
+  clearInterval(el._t);
+  el._t=setInterval(()=>{n+=step;i++;if(i>=steps){n=starTotal;clearInterval(el._t)}el.textContent=fmt(Math.round(n))},25);
+}
+
+function sl(l,btn){lang=l;document.querySelectorAll('.lf').forEach(b=>b.classList.remove('on'));btn.classList.add('on');loadTrending()}
+function sp(p,btn){period=p;document.querySelectorAll('.t-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');loadTrending()}
+function qs(t){document.getElementById('si').value=t;doSearch(t)}
+
+document.getElementById('sb').onclick=()=>doSearch(document.getElementById('si').value);
+document.getElementById('si').onkeydown=e=>{if(e.key==='Enter')doSearch(e.target.value)};
+
+let ly=0;
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY,nav=document.querySelector('nav');
+  nav.style.opacity=y>ly&&y>80?'0':'1';
+  nav.style.pointerEvents=y>ly&&y>80?'none':'all';
+  nav.style.transition='opacity .3s';
+  ly=y;
+},{passive:true});
+
+loadTrending();
+</script>
+</body>
+</html>
