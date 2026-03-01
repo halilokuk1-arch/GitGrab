@@ -165,19 +165,17 @@ function createLegendaryCard(repo) {
             </button>
         </div>
     `;
-    
     // Karta tıklayınca modal açılsın (butonlar hariç)
     card.onclick = (e) => {
         if (!e.target.closest('.action-bypass')) {
             openEliteDetail(repo);
         }
     };
-
     // Detay butonuna özel tıklama
     card.querySelector('.btn-view').onclick = (e) => {
         e.stopPropagation();
         openEliteDetail(repo);
     };
-
     return card;
 }
+
