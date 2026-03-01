@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitGrab - GitHub Repo İndirici</title>
-    <meta name="description" content="GitHub repolarını kolayca arayın, keşfedin ve indirin. Açık kaynak projelere hızlı erişim.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <!-- Animated Background -->
     <div class="bg-gradient"></div>
     <div class="bg-grid"></div>
     <div class="floating-orbs">
@@ -21,7 +19,6 @@
         <div class="orb orb-4"></div>
     </div>
 
-    <!-- Header / Navbar -->
     <header class="navbar" id="navbar">
         <div class="nav-container">
             <a href="#" class="logo">
@@ -38,239 +35,31 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero" id="hero">
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="badge-dot"></span>
                 <span>Açık Kaynak Keşfet</span>
             </div>
-            <h1 class="hero-title">
-                GitHub Projelerini
-                <br>
-                <span class="gradient-text">Kolayca İndir</span>
-            </h1>
-            <p class="hero-subtitle">
-                Milyonlarca açık kaynak projeyi arayın, keşfedin ve tek tıkla indirin.
-                <br>Geliştirici deneyiminizi bir üst seviyeye taşıyın.
-            </p>
+            <h1 class="hero-title">GitHub Projelerini<br><span class="gradient-text">Kolayca İndir</span></h1>
+            <p class="hero-subtitle">Milyonlarca açık kaynak projeyi arayın ve tek tıkla indirin.</p>
+            
             <div class="hero-search" id="search-section">
                 <div class="search-wrapper">
-                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.35-4.35"/>
-                    </svg>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Repo adı, kullanıcı veya konu ara..." autocomplete="off">
-                    <button id="searchBtn" class="search-btn">
-                        <span>Ara</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14m-7-7 7 7-7 7"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="search-tags">
-                    <span class="tag-label">Popüler:</span>
-                    <button class="search-tag" data-query="react">React</button>
-                    <button class="search-tag" data-query="python machine learning">ML</button>
-                    <button class="search-tag" data-query="nextjs">Next.js</button>
-                    <button class="search-tag" data-query="game engine">Game Engine</button>
-                    <button class="search-tag" data-query="api rest">REST API</button>
-                </div>
-            </div>
-            <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-number" data-target="330">0</span><span class="stat-suffix">M+</span>
-                    <span class="stat-label">Repo</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
-                    <span class="stat-number" data-target="100">0</span><span class="stat-suffix">M+</span>
-                    <span class="stat-label">Geliştirici</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
-                    <span class="stat-number" data-target="4">0</span><span class="stat-suffix">B+</span>
-                    <span class="stat-label">Katkı</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Repo adı veya kullanıcı ara..." autocomplete="off">
+                    <button id="searchBtn" class="search-btn"><span>Ara</span></button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Results Section -->
-    <section class="results-section" id="results-section" style="display:none;">
+    <section class="results-section" id="results-section">
         <div class="results-container">
-            <div class="results-header">
-                <h2 class="results-title">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                    </svg>
-                    Arama Sonuçları
-                </h2>
-                <span class="results-count" id="resultsCount"></span>
-            </div>
-            <div class="results-grid" id="resultsGrid">
-                <!-- Cards will be injected here -->
-            </div>
-            <div class="loading-spinner" id="loadingSpinner" style="display:none;">
-                <div class="spinner"></div>
-                <p>GitHub'da aranıyor...</p>
-            </div>
-            <div class="no-results" id="noResults" style="display:none;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
-                    <line x1="9" y1="9" x2="9.01" y2="9"/>
-                    <line x1="15" y1="9" x2="15.01" y2="9"/>
-                </svg>
-                <p>Sonuç bulunamadı. Farklı bir arama deneyin.</p>
-            </div>
-            <button class="load-more-btn" id="loadMoreBtn" style="display:none;">
-                Daha Fazla Yükle
-            </button>
+            <div id="resultsGrid" class="results-grid"></div>
+            <div id="loadingSpinner" style="display:none;">Yükleniyor...</div>
         </div>
     </section>
 
-    <!-- Trending Section -->
-    <section class="trending-section" id="trending-section">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-badge">🔥 Trend</div>
-                <h2 class="section-title">Bugünün Popüler Projeleri</h2>
-                <p class="section-subtitle">GitHub'da en çok yıldız alan projeler</p>
-            </div>
-            <div class="language-filter" id="languageFilter">
-                <button class="lang-btn active" data-lang="">Tümü</button>
-                <button class="lang-btn" data-lang="javascript">JavaScript</button>
-                <button class="lang-btn" data-lang="python">Python</button>
-                <button class="lang-btn" data-lang="typescript">TypeScript</button>
-                <button class="lang-btn" data-lang="rust">Rust</button>
-                <button class="lang-btn" data-lang="go">Go</button>
-                <button class="lang-btn" data-lang="java">Java</button>
-            </div>
-            <div class="trending-grid" id="trendingGrid">
-                <!-- Trending cards injected here -->
-            </div>
-            <div class="loading-spinner" id="trendingSpinner">
-                <div class="spinner"></div>
-                <p>Trend projeler yükleniyor...</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features-section" id="features-section">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-badge">✨ Özellikler</div>
-                <h2 class="section-title">Neden GitGrab?</h2>
-                <p class="section-subtitle">Açık kaynak dünyasına en hızlı erişim</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon" style="--accent: #6366f1;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="m21 21-4.35-4.35"/>
-                        </svg>
-                    </div>
-                    <h3>Akıllı Arama</h3>
-                    <p>GitHub API ile milyonlarca repo arasında anında arayın</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon" style="--accent: #8b5cf6;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7,10 12,15 17,10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                    </div>
-                    <h3>Tek Tık İndirme</h3>
-                    <p>ZIP olarak indirin veya git clone komutu kopyalayın</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon" style="--accent: #ec4899;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                        </svg>
-                    </div>
-                    <h3>Süper Hızlı</h3>
-                    <p>Anında sonuçlar, sıfır bekleme süresi</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon" style="--accent: #06b6d4;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
-                    <h3>Güvenli</h3>
-                    <p>Doğrudan GitHub'dan, güvenilir kaynak</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon" style="--accent: #f59e0b;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                        </svg>
-                    </div>
-                    <h3>Trend Takip</h3>
-                    <p>En popüler ve trend projeleri keşfedin</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon" style="--accent: #10b981;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                            <line x1="8" y1="21" x2="16" y2="21"/>
-                            <line x1="12" y1="17" x2="12" y2="21"/>
-                        </svg>
-                    </div>
-                    <h3>Responsive</h3>
-                    <p>Her cihazda mükemmel görünüm</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                    </svg>
-                    <span>Git<span class="logo-accent">Grab</span></span>
-                </div>
-                <p class="footer-text">GitHub açık kaynak projelerine hızlı erişim platformu</p>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 GitGrab. GitHub API ile güçlendirilmiştir.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Repo Detail Modal -->
-    <div class="modal-overlay" id="repoModal">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </button>
-            <div class="modal-body" id="modalBody">
-                <!-- Modal content injected here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-            <polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-        <span id="toastMessage">Kopyalandı!</span>
-    </div>
-
-    <script src="script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
