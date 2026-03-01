@@ -42,3 +42,24 @@ pre {
     border-radius: 8px;
     overflow-x: auto;
     border: 1px
+.repo-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.repo-action-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    transition: all 0.2s;
+}
+
+.repo-action-btn:hover {
+    background: var(--accent-1);
+    transform: translateY(-2px);
+}
