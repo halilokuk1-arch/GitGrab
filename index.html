@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitGrab Pro - Repo Explorer</title>
+    <title>GitGrab - Repo Explorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
@@ -24,7 +24,7 @@
                 <span class="logo-text">Git<span class="logo-accent">Grab</span></span>
             </a>
             <nav class="nav-links">
-                <a href="#search-section" class="nav-link">Arama</a>
+                <a href="#search-section" class="nav-link">Ara</a>
                 <a href="#trending-section" class="nav-link">Trendler</a>
             </nav>
         </div>
@@ -38,26 +38,22 @@
             
             <div class="hero-search" id="search-section">
                 <div class="search-wrapper">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Repo veya kullanıcı ara... (örn: react)">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Repo veya kullanıcı ara...">
                     <button id="searchBtn" class="search-btn">Ara</button>
                 </div>
                 <div class="search-tags">
                     <span class="tag-label">Popüler:</span>
                     <button class="search-tag" data-query="react">React</button>
                     <button class="search-tag" data-query="python">Python</button>
-                    <button class="search-tag" data-query="machine learning">Yapay Zeka</button>
+                    <button class="search-tag" data-query="rust">Rust</button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section class="results-section" id="results-section" style="display: none;">
-        <div class="section-container">
-            <div class="section-header" style="margin-bottom: 20px;">
-                <h2 class="section-title">Arama Sonuçları</h2>
-                <p class="section-subtitle" id="searchTime"></p>
+            <div class="hero-stats">
+                <div class="stat"><span class="stat-number">330</span><span class="stat-suffix">M+</span><span class="stat-label">Repo</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-number">100</span><span class="stat-suffix">M+</span><span class="stat-label">Geliştirici</span></div>
             </div>
-            <div id="resultsGrid" class="results-grid"></div>
         </div>
     </section>
 
@@ -73,32 +69,17 @@
                     <button class="lang-btn" data-lang="rust">Rust</button>
                 </div>
             </div>
-            <div id="trendingGrid" class="trending-grid"></div>
+            
+            <div id="loadingTrend" class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Trendler yükleniyor...</p>
+            </div>
+
+            <div id="trendingGrid" class="trending-grid">
+                </div>
         </div>
     </section>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <span class="logo-text">Git<span class="logo-accent">Grab</span></span>
-                <p class="footer-text">Milyonlarca açık kaynak projesi parmaklarınızın ucunda.</p>
-            </div>
-        </div>
-    </footer>
-
-    <div id="copyToast" class="toast">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-        <span>Link kopyalandı!</span>
-    </div>
-
-    <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" id="closeModal">&times;</button>
-            <div id="modalBody" class="modal-body"></div>
-        </div>
-    </div>
 
     <script src="./script.js"></script>
 </body>
 </html>
-
