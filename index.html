@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitGrab — Open Source Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="noise"></div>
+<div class="cursor" id="cursor"></div>
+
+<nav id="nav">
+  <a href="#" class="logo">
+    <span class="logo-bracket">[</span>GIT<span class="logo-accent">GRAB</span><span class="logo-bracket">]</span>
+  </a>
+  <div class="nav-links">
+    <a href="#search-section">_search</a>
+    <a href="#trending-section">_trending</a>
+  </div>
+  <div class="nav-status">
+    <span class="status-dot"></span>
+    <span id="nav-api-status">API LIVE</span>
+  </div>
+</nav>
+
+<section id="search-section" class="hero">
+  <div class="hero-eyebrow">// OPEN SOURCE DISCOVERY ENGINE</div>
+  <h1 class="hero-title">
+    <span class="line1">FIND</span>
+    <span class="line2">ANY<span class="title-accent">REPO</span></span>
+    <span class="line3">INSTANTLY</span>
+  </h1>
+  <p class="hero-sub">Search 330M+ repositories. Download any project as ZIP in one click.</p>
+
+  <div class="search-container">
+    <div class="search-inner">
+      <span class="search-prompt">$&gt;</span>
+      <input id="search-input" type="text" placeholder="react, machine-learning, rust-cli..." autocomplete="off" spellcheck="false">
+      <button id="search-btn" class="search-execute">EXECUTE</button>
+    </div>
+    <div class="search-tags">
+      <button class="stag" onclick="quickSearch('react')">react</button>
+      <button class="stag" onclick="quickSearch('python ai')">python-ai</button>
+      <button class="stag" onclick="quickSearch('rust')">rust</button>
+      <button class="stag" onclick="quickSearch('next.js')">next.js</button>
+      <button class="stag" onclick="quickSearch('cli tools')">cli-tools</button>
+      <button class="stag" onclick="quickSearch('web3')">web3</button>
+      <button class="stag" onclick="quickSearch('game engine')">game-engine</button>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-val" id="s-repos">330M+</div>
+      <div class="hstat-key">REPOSITORIES</div>
+    </div>
+    <div class="hstat-divider">/</div>
+    <div class="hstat">
+      <div class="hstat-val">100M+</div>
+      <div class="hstat-key">DEVELOPERS</div>
+    </div>
+    <div class="hstat-divider">/</div>
+    <div class="hstat">
+      <div class="hstat-val" id="s-stars">—</div>
+      <div class="hstat-key">STARS FOUND</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results-section" class="results-section hidden">
+  <div class="section-bar">
+    <div class="section-bar-left">
+      <span class="section-tag">RESULTS</span>
+      <span id="results-title" class="section-bar-title">—</span>
+    </div>
+    <span id="results-meta" class="section-bar-meta"></span>
+  </div>
+  <div id="results-grid" class="results-grid"></div>
+</section>
+
+<!-- TRENDING -->
+<section id="trending-section" class="trending-section">
+  <div class="section-bar">
+    <div class="section-bar-left">
+      <span class="section-tag">HOT</span>
+      <span class="section-bar-title">TRENDING REPOS</span>
+    </div>
+    <div class="period-tabs">
+      <button class="ptab active" onclick="setTrendingPeriod('daily',this)">TODAY</button>
+      <button class="ptab" onclick="setTrendingPeriod('weekly',this)">WEEK</button>
+      <button class="ptab" onclick="setTrendingPeriod('monthly',this)">MONTH</button>
+    </div>
+  </div>
+
+  <div class="lang-row">
+    <button class="ltag active" onclick="setLang('',this)">ALL</button>
+    <button class="ltag" onclick="setLang('javascript',this)"><i style="background:#f7df1e"></i>JS</button>
+    <button class="ltag" onclick="setLang('python',this)"><i style="background:#3572a5"></i>PY</button>
+    <button class="ltag" onclick="setLang('rust',this)"><i style="background:#dea584"></i>RS</button>
+    <button class="ltag" onclick="setLang('typescript',this)"><i style="background:#2b7489"></i>TS</button>
+    <button class="ltag" onclick="setLang('go',this)"><i style="background:#00add8"></i>GO</button>
+    <button class="ltag" onclick="setLang('c++',this)"><i style="background:#f34b7d"></i>C++</button>
+  </div>
+
+  <div id="trending-grid" class="trending-grid">
+    <div class="skel"></div>
+    <div class="skel" style="animation-delay:.08s"></div>
+    <div class="skel" style="animation-delay:.16s"></div>
+    <div class="skel" style="animation-delay:.24s"></div>
+    <div class="skel" style="animation-delay:.32s"></div>
+    <div class="skel" style="animation-delay:.40s"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-l">GitGrab © 2024 — Powered by GitHub API</div>
+  <div class="footer-r" id="rate-limit-info"></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
